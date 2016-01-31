@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="grab.dal.mapper.CompanyInfoMapper" >
+  <resultMap id="BaseResultMap" type="grab.dal.model.CompanyInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="register_id" property="registerId" jdbcType="VARCHAR" />
+    <result column="org_id" property="orgId" jdbcType="VARCHAR" />
+    <result column="companyName" property="companyname" jdbcType="VARCHAR" />
+    <result column="credit_code" property="creditCode" jdbcType="VARCHAR" />
+    <result column="operating_state" property="operatingState" jdbcType="VARCHAR" />
+    <result column="company_type" property="companyType" jdbcType="VARCHAR" />
+    <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+    <result column="register_capital" property="registerCapital" jdbcType="DECIMAL" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="register_date" property="registerDate" jdbcType="DATE" />
+    <result column="register_org" property="registerOrg" jdbcType="VARCHAR" />
+    <result column="begin_date" property="beginDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="grab.dal.model.CompanyInfoWithBLOBs" extends="BaseResultMap" >
+    <result column="business_scope" property="businessScope" jdbcType="LONGVARCHAR" />
+    <result column="all_info" property="allInfo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, register_id, org_id, companyName, credit_code, operating_state, company_type, 
+    legal_person, register_capital, address, register_date, register_org, begin_date, 
+    end_date, company_id, path
+  </sql>
+  <sql id="Blob_Column_List" >
+    business_scope, all_info
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from company_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from company_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="grab.dal.model.CompanyInfoWithBLOBs" >
+    insert into company_info (id, register_id, org_id, 
+      companyName, credit_code, operating_state, 
+      company_type, legal_person, register_capital, 
+      address, register_date, register_org, 
+      begin_date, end_date, company_id, 
+      path, business_scope, all_info
+      )
+    values (#{id,jdbcType=INTEGER}, #{registerId,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, 
+      #{companyname,jdbcType=VARCHAR}, #{creditCode,jdbcType=VARCHAR}, #{operatingState,jdbcType=VARCHAR}, 
+      #{companyType,jdbcType=VARCHAR}, #{legalPerson,jdbcType=VARCHAR}, #{registerCapital,jdbcType=DECIMAL}, 
+      #{address,jdbcType=VARCHAR}, #{registerDate,jdbcType=DATE}, #{registerOrg,jdbcType=VARCHAR}, 
+      #{beginDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, #{companyId,jdbcType=VARCHAR}, 
+      #{path,jdbcType=VARCHAR}, #{businessScope,jdbcType=LONGVARCHAR}, #{allInfo,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="grab.dal.model.CompanyInfoWithBLOBs" >
+    insert into company_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="registerId != null" >
+        register_id,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="companyname != null" >
+        companyName,
+      </if>
+      <if test="creditCode != null" >
+        credit_code,
+      </if>
+      <if test="operatingState != null" >
+        operating_state,
+      </if>
+      <if test="companyType != null" >
+        company_type,
+      </if>
+      <if test="legalPerson != null" >
+        legal_person,
+      </if>
+      <if test="registerCapital != null" >
+        register_capital,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="registerDate != null" >
+        register_date,
+      </if>
+      <if test="registerOrg != null" >
+        register_org,
+      </if>
+      <if test="beginDate != null" >
+        begin_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="businessScope != null" >
+        business_scope,
+      </if>
+      <if test="allInfo != null" >
+        all_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="registerId != null" >
+        #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyname != null" >
+        #{companyname,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCode != null" >
+        #{creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatingState != null" >
+        #{operatingState,jdbcType=VARCHAR},
+      </if>
+      <if test="companyType != null" >
+        #{companyType,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="registerCapital != null" >
+        #{registerCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null" >
+        #{registerDate,jdbcType=DATE},
+      </if>
+      <if test="registerOrg != null" >
+        #{registerOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="beginDate != null" >
+        #{beginDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScope != null" >
+        #{businessScope,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="allInfo != null" >
+        #{allInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="grab.dal.model.CompanyInfoWithBLOBs" >
+    update company_info
+    <set >
+      <if test="registerId != null" >
+        register_id = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyname != null" >
+        companyName = #{companyname,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCode != null" >
+        credit_code = #{creditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatingState != null" >
+        operating_state = #{operatingState,jdbcType=VARCHAR},
+      </if>
+      <if test="companyType != null" >
+        company_type = #{companyType,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        legal_person = #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="registerCapital != null" >
+        register_capital = #{registerCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null" >
+        register_date = #{registerDate,jdbcType=DATE},
+      </if>
+      <if test="registerOrg != null" >
+        register_org = #{registerOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="beginDate != null" >
+        begin_date = #{beginDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScope != null" >
+        business_scope = #{businessScope,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="allInfo != null" >
+        all_info = #{allInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="grab.dal.model.CompanyInfoWithBLOBs" >
+    update company_info
+    set register_id = #{registerId,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=VARCHAR},
+      companyName = #{companyname,jdbcType=VARCHAR},
+      credit_code = #{creditCode,jdbcType=VARCHAR},
+      operating_state = #{operatingState,jdbcType=VARCHAR},
+      company_type = #{companyType,jdbcType=VARCHAR},
+      legal_person = #{legalPerson,jdbcType=VARCHAR},
+      register_capital = #{registerCapital,jdbcType=DECIMAL},
+      address = #{address,jdbcType=VARCHAR},
+      register_date = #{registerDate,jdbcType=DATE},
+      register_org = #{registerOrg,jdbcType=VARCHAR},
+      begin_date = #{beginDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      business_scope = #{businessScope,jdbcType=LONGVARCHAR},
+      all_info = #{allInfo,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="grab.dal.model.CompanyInfo" >
+    update company_info
+    set register_id = #{registerId,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=VARCHAR},
+      companyName = #{companyname,jdbcType=VARCHAR},
+      credit_code = #{creditCode,jdbcType=VARCHAR},
+      operating_state = #{operatingState,jdbcType=VARCHAR},
+      company_type = #{companyType,jdbcType=VARCHAR},
+      legal_person = #{legalPerson,jdbcType=VARCHAR},
+      register_capital = #{registerCapital,jdbcType=DECIMAL},
+      address = #{address,jdbcType=VARCHAR},
+      register_date = #{registerDate,jdbcType=DATE},
+      register_org = #{registerOrg,jdbcType=VARCHAR},
+      begin_date = #{beginDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

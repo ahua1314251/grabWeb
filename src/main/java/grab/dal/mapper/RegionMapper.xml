@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="grab.dal.mapper.RegionMapper" >
+  <resultMap id="BaseResultMap" type="grab.dal.model.Region" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="region_id" property="regionId" jdbcType="INTEGER" />
+    <result column="region_code" property="regionCode" jdbcType="VARCHAR" />
+    <result column="region_name" property="regionName" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, region_id, region_code, region_name, path
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Region
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Region
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="grab.dal.model.Region" >
+    insert into Region (id, region_id, region_code, 
+      region_name, path)
+    values (#{id,jdbcType=INTEGER}, #{regionId,jdbcType=INTEGER}, #{regionCode,jdbcType=VARCHAR}, 
+      #{regionName,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="grab.dal.model.Region" >
+    insert into Region
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="regionId != null" >
+        region_id,
+      </if>
+      <if test="regionCode != null" >
+        region_code,
+      </if>
+      <if test="regionName != null" >
+        region_name,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="regionId != null" >
+        #{regionId,jdbcType=INTEGER},
+      </if>
+      <if test="regionCode != null" >
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionName != null" >
+        #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="grab.dal.model.Region" >
+    update Region
+    <set >
+      <if test="regionId != null" >
+        region_id = #{regionId,jdbcType=INTEGER},
+      </if>
+      <if test="regionCode != null" >
+        region_code = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionName != null" >
+        region_name = #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="grab.dal.model.Region" >
+    update Region
+    set region_id = #{regionId,jdbcType=INTEGER},
+      region_code = #{regionCode,jdbcType=VARCHAR},
+      region_name = #{regionName,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  <select id="getAllRegion" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Region  LIMIT 19,1000
+  </select>
+  
+  
+</mapper>

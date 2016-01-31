@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="grab.dal.mapper.ImmaterialAssetsMapper" >
+  <resultMap id="BaseResultMap" type="grab.dal.model.ImmaterialAssets" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="register_id" property="registerId" jdbcType="VARCHAR" />
+    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="grab.dal.model.ImmaterialAssets" extends="BaseResultMap" >
+    <result column="all_info" property="allInfo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, register_id, company_id, path
+  </sql>
+  <sql id="Blob_Column_List" >
+    all_info
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from immaterial_assets
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from immaterial_assets
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="grab.dal.model.ImmaterialAssets" >
+    insert into immaterial_assets (id, register_id, company_id, 
+      path, all_info)
+    values (#{id,jdbcType=INTEGER}, #{registerId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
+      #{path,jdbcType=VARCHAR}, #{allInfo,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="grab.dal.model.ImmaterialAssets" >
+    insert into immaterial_assets
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="registerId != null" >
+        register_id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="allInfo != null" >
+        all_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="registerId != null" >
+        #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="allInfo != null" >
+        #{allInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="grab.dal.model.ImmaterialAssets" >
+    update immaterial_assets
+    <set >
+      <if test="registerId != null" >
+        register_id = #{registerId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="allInfo != null" >
+        all_info = #{allInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="grab.dal.model.ImmaterialAssets" >
+    update immaterial_assets
+    set register_id = #{registerId,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      all_info = #{allInfo,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="grab.dal.model.ImmaterialAssets" >
+    update immaterial_assets
+    set register_id = #{registerId,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
