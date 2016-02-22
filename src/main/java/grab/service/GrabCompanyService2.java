@@ -57,7 +57,7 @@ public class GrabCompanyService2 {
 	
 	public List<Region> loadCity(List<Region> regionList,int begin){
 		if(regionList==null){
-	regionList = regionMapper.getAllRegion(begin);
+	regionList = regionMapper.getAllRegion();
 		}
 	for(Region tmp: regionList){
 		System.out.println(tmp.getId()+":"+tmp.getRegionName());

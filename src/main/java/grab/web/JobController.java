@@ -15,8 +15,7 @@ public class JobController {
 	@ResponseBody
 	public String startJob(int begin, String end) {
 		System.out.println("start Job begin:"+begin);
-		grab.grabCompany(begin);
-
+		
 		return "qeqwe";
 	}
 
