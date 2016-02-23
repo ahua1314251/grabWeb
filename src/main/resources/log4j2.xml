@@ -36,7 +36,7 @@
 	<Loggers>
 		<Root level="info">
 			<AppenderRef ref="MyFile" />
-<!-- 			<AppenderRef ref="STDOUT" /> -->
+			<AppenderRef ref="STDOUT" />
 			<AppenderRef ref="FileError" />
 			<AppenderRef ref="FileAll" />
 

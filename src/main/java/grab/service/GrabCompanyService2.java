@@ -1,91 +1,104 @@
 package grab.service;
 
-import java.net.MalformedURLException;
+import grab.CodeUtil;
+import grab.dal.mapper.RegionMapper;
+import grab.dal.mapper.ResultMapper;
+import grab.dal.model.Region;
+import grab.dal.model.Result;
+
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import grab.CodeUtil;
-import grab.dal.mapper.RegionMapper;
-import grab.dal.mapper.ResultMapper;
-import grab.dal.model.CompanyInfoWithBLOBs;
-import grab.dal.model.Region;
-import grab.dal.model.Result;
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 @Component
 public class GrabCompanyService2 {
-	private static Logger logger = LogManager.getLogger(GrabCompanyService2.class);
-	private static  List<Region> regionList;
+	private static Logger logger = LogManager
+			.getLogger(GrabCompanyService2.class);
+	private static List<Region> regionList;
+	private static int currentCount = -1;
 	private static Integer noResultCount = 0;
+	private static String currentRegisterId = "330000000000000";
 	@Autowired
 	RegionMapper regionMapper;
 	@Autowired
 	ResultMapper resultMapper;
 
-	public void grabCompany(){
+	public void grabCompany() {
 		
-		 Connection connection = Jsoup.connect("http://www.qichacha.com");
-		 connection.timeout(15000);
-		 String currentRegisterId = "";
-		 regionList = loadCity(regionList,1);
-		
-		 for(int i=0;i<regionList.size();i++){
-			 logger.info("start");
-			 currentRegisterId = regionList.get(i).getRegionId()+"000000000";
-			 for(int j=0;j<100000000;j++){
-				 logger.info("noResultCount:{} currentRegisterId:{}",noResultCount,currentRegisterId);
-				 currentRegisterId =  String.valueOf(CodeUtil.getNextCode(currentRegisterId));
-				 if(noResultCount ==3000){
-					 noResultCount=0;
-					 break;
-				 }
-				 noResultCount = 0;
+		//connection.request().header("Accept", "application/json");
 
-			 }
-		 }}
-		
-	
+		regionList = new ArrayList<Region>();      //loadCity(regionList, 1);
+		Region r1= new Region();
+		r1.setRegionCode("123455");
+		Region r2= new Region();
+		r2.setRegionCode("333444");
+		regionList.add(r1);
+		regionList.add(r2);
+		while (true) {
+			logger.info("start");
+			currentRegisterId = String.valueOf(CodeUtil.getNextCode(currentRegisterId));
 
-	
-	public List<Region> loadCity(List<Region> regionList,int begin){
-		if(regionList==null){
-	regionList = regionMapper.getAllRegion();
+			logger.info("noResultCount:{} currentRegisterId:{}", noResultCount,currentRegisterId);
+            try {
+				Thread.sleep(3000);
+				
+				
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+			getAllInfo(currentRegisterId);
+			
+			
+			if (noResultCount == 8000) {
+				if (regionList.size() < 2) {
+					break;
+				}
+				noResultCount = 0;
+				currentRegisterId = regionList.get(0).toString() + "000000000";
+			}
 		}
-	for(Region tmp: regionList){
-		System.out.println(tmp.getId()+":"+tmp.getRegionName());
 	}
-	return regionList;
+
+	public List<Region> loadCity(List<Region> regionList, int begin) {
+		if (regionList == null) {
+			regionList = regionMapper.getAllRegion();
+		}
+		for (Region tmp : regionList) {
+			System.out.println(tmp.getId() + ":" + tmp.getRegionName());
+		}
+		return regionList;
 	}
-	
-	public void getAllInfo(String registerId ,Connection connection) {
+
+	public void getAllInfo(String registerId) {
 		URL url = null;
 		try {
-			url = new URL("http://www.qichacha.com/search?key=" + registerId + "&sType=0");
-			logger.info("url:{}",url.toString());
-			connection.request().url(url);
-			Document doc = connection.get();
-			logger.info("compath:{}  companyId:{}");
+			url = new URL("http://www.tianyancha.com/search/" + registerId+ ".json");
+			logger.info("url:{}", url.toString());
+			WebClient  webClient=new WebClient(BrowserVersion.CHROME);
+			HtmlPage page=webClient.getPage(url.toString());
+			System.out.println(page.);
+//			logger.info(doc.text());
 		} catch (Exception e) {
 			Result rr = new Result();
 			rr.setStatus(0);
 			rr.setPath(url.toString());
 			rr.setCompanyId(registerId);
 			rr.setException(e.toString());
-			resultMapper.insertSelective(rr);
-			logger.error(url.toString(),e);
-			return ;
-		} 
+	//		resultMapper.insertSelective(rr);
+			logger.error(url.toString(), e);
+			return;
+		}
 
 	}
-	
-	
-	
+
 }
