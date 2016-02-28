@@ -2,6 +2,8 @@ package grab.bean;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class SimpleInfo {
 	public  long id;
 	public  String name;

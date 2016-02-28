@@ -1,24 +1,27 @@
 package grab.service;
 
-import grab.CodeUtil;
-import grab.dal.mapper.RegionMapper;
-import grab.dal.mapper.ResultMapper;
-import grab.dal.model.Region;
-import grab.dal.model.Result;
-
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.protocol.HTTP;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import grab.CodeUtil;
+import grab.JsonUtil;
+import grab.bean.SearchResult;
+import grab.dal.mapper.CompanyInfoMapper;
+import grab.dal.mapper.RegionMapper;
+import grab.dal.mapper.ResultMapper;
+import grab.dal.model.CompanyInfoWithBLOBs;
+import grab.dal.model.Region;
+import grab.dal.model.Result;
 
 @Component
 public class GrabCompanyService2 {
@@ -32,7 +35,8 @@ public class GrabCompanyService2 {
 	RegionMapper regionMapper;
 	@Autowired
 	ResultMapper resultMapper;
-
+	@Autowired
+    CompanyInfoMapper companyInfoMapper;
 	public void grabCompany() {
 		
 		//connection.request().header("Accept", "application/json");
@@ -80,27 +84,43 @@ public class GrabCompanyService2 {
 		return regionList;
 	}
 
-	public void getAllInfo(String registerId) {
+	public Boolean getAllInfo(String registerId) {
+		 SearchResult sr =null;
 		URL url = null;
 		try {
 			url = new URL("http://www.tianyancha.com/search/" + registerId+ ".json");
-		//	url = new URL("https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=json&json=1&p=3&sid=1447_19033_18241_15849_12085_18019_10633&req=2&bs=httpclient&csor=4&cb=jQuery110205389219138045127_1456235705879&_=1456235705882");
 			logger.info("url:{}", url.toString());
-
 			Request rq= Request.Get(url.toString());
-			rq.addHeader(HTTP.USER_AGENT, "Mozilla/5.0 (compatible; " +  
-                        "Baiduspider/2.0; +http://www.baidu.com/search/spider.html)");
+			rq.addHeader(HTTP.USER_AGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0)");
 			rq.addHeader(HTTP.CONN_DIRECTIVE,HTTP.CONN_KEEP_ALIVE);
 			rq.addHeader(HTTP.CONTENT_TYPE, "application/json");
             rq.socketTimeout(100000);		
 			Response rp = rq.execute();
-            System.out.println(rp.returnContent() );  
-            
-//            rq.Get("http://www.tianyancha.com/company/"+ registerId+".json");
-//            rp = rq.execute();
-//            System.out.println(rq.toString());
-//            System.out.println("---------------------------------------------------" );  
-//            System.out.println(rp.returnContent() );  
+            sr = JsonUtil.jsonToBean(rp.returnContent().toString(), SearchResult.class);
+            System.out.println(sr.data);
+			if ("ok".equals(sr.state)) {
+				Thread.sleep(2000);
+				CompanyInfoWithBLOBs comInfo =  sr.data.get(0);
+				System.out.println("http://www.tianyancha.com/company/" +comInfo.getId() + ".json");
+				rq = Request.Get("http://www.tianyancha.com/company/" + comInfo.getId() + ".json");
+				rq.addHeader(HTTP.USER_AGENT,
+						"	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:44.0) Gecko/20100101 Firefox/44.0");
+				rq.addHeader(HTTP.CONN_DIRECTIVE, HTTP.CONN_KEEP_ALIVE);
+				rq.addHeader(HTTP.CONTENT_TYPE, "application/json");
+				rq.addHeader("Accept", "application/json, text/plain, */*");
+				rq.socketTimeout(100000);
+				rq.socketTimeout(100000);
+				rp = rq.execute();
+				comInfo.setAllInfo(rp.returnContent().toString());
+				comInfo.setUpdateTime(new Date());
+			    companyInfoMapper.insertSelective(comInfo);
+//				AllInfoResult af = JsonUtil.jsonToBean(rp.returnContent().toString(), AllInfoResult.class);
+			//	System.out.println(af.data);
+				return true;
+            }else{
+            	return false;
+            }
+			
 		} catch (Exception e) {
 			Result rr = new Result();
 			rr.setStatus(0);
@@ -108,10 +128,10 @@ public class GrabCompanyService2 {
 			rr.setCompanyId(registerId);
 			rr.setException(e.toString());
 	//		resultMapper.insertSelective(rr);
-			logger.error(url.toString(), e);
-			return;
-		}
 
+			logger.error(url.toString(), e);
+		}
+		return true;
 	}
 
 }

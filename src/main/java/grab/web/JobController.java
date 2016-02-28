@@ -5,17 +5,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import grab.service.GrabCompanyService;
+import grab.service.GrabCompanyService2;
 
 @Controller
 public class JobController {
 	@Autowired
-	GrabCompanyService  grab ;
+	GrabCompanyService2  grab ;
 	@RequestMapping("/StartJob")
 	@ResponseBody
-	public String startJob(int begin, String end) {
-		System.out.println("start Job begin:"+begin);
-		
+	public String startJob(Integer begin, String end) {
+//	/	System.out.println("start Job begin:"+begin);
+		grab.grabCompany();
 		return "qeqwe";
 	}
 

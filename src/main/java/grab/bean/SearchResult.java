@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import grab.dal.model.CompanyInfoWithBLOBs;
+
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class SearchResult {
 	public  String state;
@@ -12,5 +14,5 @@ public class SearchResult {
 	public  String humanCount;
 	public  String companyCount;
 //	public  String total;
-	public  List<SimpleInfo> data;
+	public  List<CompanyInfoWithBLOBs> data;
 }
