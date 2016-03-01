@@ -4,13 +4,13 @@ import grab.dal.model.CompanyInfo;
 import grab.dal.model.CompanyInfoWithBLOBs;
 
 public interface CompanyInfoMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Integer keyId);
 
     int insert(CompanyInfoWithBLOBs record);
 
     int insertSelective(CompanyInfoWithBLOBs record);
 
-    CompanyInfoWithBLOBs selectByPrimaryKey(Integer id);
+    CompanyInfoWithBLOBs selectByPrimaryKey(Integer keyId);
 
     int updateByPrimaryKeySelective(CompanyInfoWithBLOBs record);
 

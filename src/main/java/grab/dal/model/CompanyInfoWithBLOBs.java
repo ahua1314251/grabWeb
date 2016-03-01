@@ -1,5 +1,8 @@
 package grab.dal.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class CompanyInfoWithBLOBs extends CompanyInfo {
     private String businessScope;
 

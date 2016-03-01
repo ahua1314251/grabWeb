@@ -13,8 +13,8 @@ public class JobController {
 	GrabCompanyService2  grab ;
 	@RequestMapping("/StartJob")
 	@ResponseBody
-	public String startJob(Integer begin, String end) {
-//	/	System.out.println("start Job begin:"+begin);
+	public String startJob() {
+System.out.println("start Job");
 		grab.grabCompany();
 		return "qeqwe";
 	}

@@ -10,6 +10,7 @@ import org.apache.http.client.fluent.Response;
 import org.apache.http.protocol.HTTP;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,57 +25,76 @@ import grab.dal.model.Region;
 import grab.dal.model.Result;
 
 @Component
-public class GrabCompanyService2 {
+public class GrabCompanyService2  implements InitializingBean{
 	private static Logger logger = LogManager
 			.getLogger(GrabCompanyService2.class);
-	private static List<Region> regionList;
-	private static int currentCount = -1;
-	private static Integer noResultCount = 0;
-	private static String currentRegisterId = "330000000000000";
+	private static  List<Region> regionList;
+	private static  int currentCount = -1;
+	private static  Integer noResultCount = 0;
+	private static  String currentRegisterId = "330000000000000";
 	@Autowired
 	RegionMapper regionMapper;
 	@Autowired
 	ResultMapper resultMapper;
 	@Autowired
     CompanyInfoMapper companyInfoMapper;
+	public void afterPropertiesSet(){
+		loadCity();
+		currentRegisterId = regionList.get(0).getRegionCode()+"000000000";
+		System.out.println("init *****************************************");
+	}
+	GrabCompanyService2(){
+//		regionList = new ArrayList<Region>();      //loadCity(regionList, 1);
+//		Region r1= new Region();
+//		r1.setRegionCode("123455");
+//		Region r2= new Region();
+//		r2.setRegionCode("333444");
+//		regionList.add(r1);
+//		regionList.add(r2);
+		
+	}
+	
+	@SuppressWarnings("static-access")
 	public void grabCompany() {
 		
 		//connection.request().header("Accept", "application/json");
 
-		regionList = new ArrayList<Region>();      //loadCity(regionList, 1);
-		Region r1= new Region();
-		r1.setRegionCode("123455");
-		Region r2= new Region();
-		r2.setRegionCode("333444");
-		regionList.add(r1);
-		regionList.add(r2);
+		
 		while (true) {
-			logger.info("start");
-			currentRegisterId = String.valueOf(CodeUtil.getNextCode(currentRegisterId));
+			String currentRegisterId2 = getNextRegisterId();
 
 			logger.info("noResultCount:{} currentRegisterId:{}", noResultCount,currentRegisterId);
             try {
-				Thread.sleep(2000);
+				Thread.currentThread().sleep(2000);
 				
 				
 			} catch (Exception e) {
 				
 				e.printStackTrace();
 			}
-			getAllInfo(currentRegisterId);
+			if(getAllInfo(currentRegisterId2)){
+				noResultCount = 0;
+			}else{
+				noResultCount ++;
+			}
 			
 			
 			if (noResultCount == 8000) {
 				if (regionList.size() < 2) {
 					break;
 				}
+				regionList.remove(0);
 				noResultCount = 0;
 				currentRegisterId = regionList.get(0).toString() + "000000000";
 			}
 		}
 	}
+	public synchronized String  getNextRegisterId(){
+		currentRegisterId = String.valueOf(CodeUtil.getNextCode(currentRegisterId));
+		return currentRegisterId;
+	}
 
-	public List<Region> loadCity(List<Region> regionList, int begin) {
+	public List<Region> loadCity() {
 		if (regionList == null) {
 			regionList = regionMapper.getAllRegion();
 		}
@@ -84,6 +104,7 @@ public class GrabCompanyService2 {
 		return regionList;
 	}
 
+	@SuppressWarnings("static-access")
 	public Boolean getAllInfo(String registerId) {
 		 SearchResult sr =null;
 		URL url = null;
@@ -99,7 +120,7 @@ public class GrabCompanyService2 {
             sr = JsonUtil.jsonToBean(rp.returnContent().toString(), SearchResult.class);
             System.out.println(sr.data);
 			if ("ok".equals(sr.state)) {
-				Thread.sleep(2000);
+				Thread.currentThread().sleep(2000);
 				CompanyInfoWithBLOBs comInfo =  sr.data.get(0);
 				System.out.println("http://www.tianyancha.com/company/" +comInfo.getId() + ".json");
 				rq = Request.Get("http://www.tianyancha.com/company/" + comInfo.getId() + ".json");
@@ -111,6 +132,8 @@ public class GrabCompanyService2 {
 				rq.socketTimeout(100000);
 				rq.socketTimeout(100000);
 				rp = rq.execute();
+				comInfo.setRegisterId(registerId);
+				comInfo.setOrgId(regionList.get(0).getRegionCode());
 				comInfo.setAllInfo(rp.returnContent().toString());
 				comInfo.setUpdateTime(new Date());
 			    companyInfoMapper.insertSelective(comInfo);
@@ -127,7 +150,7 @@ public class GrabCompanyService2 {
 			rr.setPath(url.toString());
 			rr.setCompanyId(registerId);
 			rr.setException(e.toString());
-	//		resultMapper.insertSelective(rr);
+			resultMapper.insertSelective(rr);
 
 			logger.error(url.toString(), e);
 		}

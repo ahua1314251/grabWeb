@@ -1,26 +1,27 @@
 package grab.dal.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class CompanyInfo {
-    private Integer id;
+    private Integer keyId;
+
+    private Long id;
 
     private String registerId;
 
     private String orgId;
 
-    private String companyname;
+    private String name;
 
     private String creditCode;
 
-    private String operatingState;
+    private String regStatus;
 
     private String companyType;
 
-    private String legalPerson;
+    private String legalPersonName;
 
-    private BigDecimal registerCapital;
+    private String regCapital;
 
     private String address;
 
@@ -28,19 +29,43 @@ public class CompanyInfo {
 
     private String registerOrg;
 
-    private Date beginDate;
+    private Date estiblishTime;
 
     private Date endDate;
 
-    private String companyId;
+    private String humannames;
+
+    private Integer orginalScore;
+
+    private Integer score;
+
+    private String categoryCode;
+
+    private String industry;
+
+    private String trademarks;
+
+    private Integer type;
+
+    private String base;
+
+    private Date updateTime;
 
     private String path;
 
-    public Integer getId() {
+    public Integer getKeyId() {
+        return keyId;
+    }
+
+    public void setKeyId(Integer keyId) {
+        this.keyId = keyId;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -60,12 +85,12 @@ public class CompanyInfo {
         this.orgId = orgId == null ? null : orgId.trim();
     }
 
-    public String getCompanyname() {
-        return companyname;
+    public String getName() {
+        return name;
     }
 
-    public void setCompanyname(String companyname) {
-        this.companyname = companyname == null ? null : companyname.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     public String getCreditCode() {
@@ -76,12 +101,12 @@ public class CompanyInfo {
         this.creditCode = creditCode == null ? null : creditCode.trim();
     }
 
-    public String getOperatingState() {
-        return operatingState;
+    public String getRegStatus() {
+        return regStatus;
     }
 
-    public void setOperatingState(String operatingState) {
-        this.operatingState = operatingState == null ? null : operatingState.trim();
+    public void setRegStatus(String regStatus) {
+        this.regStatus = regStatus == null ? null : regStatus.trim();
     }
 
     public String getCompanyType() {
@@ -92,20 +117,20 @@ public class CompanyInfo {
         this.companyType = companyType == null ? null : companyType.trim();
     }
 
-    public String getLegalPerson() {
-        return legalPerson;
+    public String getLegalPersonName() {
+        return legalPersonName;
     }
 
-    public void setLegalPerson(String legalPerson) {
-        this.legalPerson = legalPerson == null ? null : legalPerson.trim();
+    public void setLegalPersonName(String legalPersonName) {
+        this.legalPersonName = legalPersonName == null ? null : legalPersonName.trim();
     }
 
-    public BigDecimal getRegisterCapital() {
-        return registerCapital;
+    public String getRegCapital() {
+        return regCapital;
     }
 
-    public void setRegisterCapital(BigDecimal registerCapital) {
-        this.registerCapital = registerCapital;
+    public void setRegCapital(String regCapital) {
+        this.regCapital = regCapital == null ? null : regCapital.trim();
     }
 
     public String getAddress() {
@@ -132,12 +157,12 @@ public class CompanyInfo {
         this.registerOrg = registerOrg == null ? null : registerOrg.trim();
     }
 
-    public Date getBeginDate() {
-        return beginDate;
+    public Date getEstiblishTime() {
+        return estiblishTime;
     }
 
-    public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
+    public void setEstiblishTime(Date estiblishTime) {
+        this.estiblishTime = estiblishTime;
     }
 
     public Date getEndDate() {
@@ -148,12 +173,76 @@ public class CompanyInfo {
         this.endDate = endDate;
     }
 
-    public String getCompanyId() {
-        return companyId;
+    public String getHumannames() {
+        return humannames;
     }
 
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId == null ? null : companyId.trim();
+    public void setHumannames(String humannames) {
+        this.humannames = humannames == null ? null : humannames.trim();
+    }
+
+    public Integer getOrginalScore() {
+        return orginalScore;
+    }
+
+    public void setOrginalScore(Integer orginalScore) {
+        this.orginalScore = orginalScore;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode == null ? null : categoryCode.trim();
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry == null ? null : industry.trim();
+    }
+
+    public String getTrademarks() {
+        return trademarks;
+    }
+
+    public void setTrademarks(String trademarks) {
+        this.trademarks = trademarks == null ? null : trademarks.trim();
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getBase() {
+        return base;
+    }
+
+    public void setBase(String base) {
+        this.base = base == null ? null : base.trim();
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getPath() {

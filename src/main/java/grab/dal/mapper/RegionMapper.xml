@@ -96,7 +96,7 @@
   <select id="getAllRegion" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from Region  LIMIT 19,1000
+    from Region  where region_code LIKE '33%'
   </select>
   
   
